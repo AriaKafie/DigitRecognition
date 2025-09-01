@@ -57,7 +57,7 @@ int main()
     {
         int img_count = 0;
         
-        for (const auto& entry : std::filesystem::directory_iterator(std::to_string(digit)))
+        for (const auto& entry : std::filesystem::directory_iterator(std::string("./dataset/") + std::to_string(digit)))
         {
             ++img_count;
             
