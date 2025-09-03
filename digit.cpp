@@ -52,12 +52,12 @@ int main()
     std::cout << "Training..." << std::endl;
     
     float normalized[Dim * Dim];
-    
+
     for (int digit = 0; digit < 10; digit++)
     {
         int img_count = 0;
         
-        for (const auto& entry : std::filesystem::directory_iterator(std::string("./dataset/") + std::to_string(digit)))
+        for (const auto& entry : std::filesystem::directory_iterator(std::string("./trainingSet/") + std::to_string(digit)))
         {
             ++img_count;
             
@@ -68,10 +68,29 @@ int main()
                 for (int i = 0; i < Dim * Dim; i++)
                     model[digit][i] += (normalized[i] - model[digit][i]) / img_count;
             }
+
+            std::cout << "\r" << ((digit * 4200 + img_count) / 42000.0f * 100) << "%" << std::flush;
         }
     }
 
     std::cout << "Done training" << std::endl;
+
+    for (int digit = 0; digit < 10; digit++)
+    {
+        for (int i = 0; i < Dim; i++)
+        {
+            for (int j = 0; j < Dim; j++)
+            {
+                float f = model[digit][i * Dim + j];
+
+                std::cout << (f >= 0.75f ? "@" :
+                              f >= 0.5f  ? "#" :
+                              f >= 0.25  ? "+" : " ");
+            }
+            
+            std::cout << std::endl;
+        }
+    }
 
     for (;;)
     {
